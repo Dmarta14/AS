@@ -1,0 +1,60 @@
+Laboratorio 1
+
+1.2 Gestión y manipulación de archivos
+Esta parte está enfocada a explorar diferentes comandos del Shell y ver su efecto.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+1) Crear una carpeta llamada AS en vuestro directorio raíz de usuario.
+
+  mkdir AS
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+2) Entrar dentro de la carpeta y comprobar que el directorio coincide con el contenido de la variable de entorno
+   PWD.
+  cd AS/  ; Entramos dentro de la carpeta
+  pwd
+  /home/dmarta14/AS ; Comprobación
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+3) Instalar cal con el comando apt install ncal. Utilizar cal para mostrar un calendario y redirigir la salida a un
+   fichero de texto. Comprobar que ese fichero se crea correctamente y que su contenido es el esperado.
+
+  sudo apt install ncal
+  cal 10 2023 ;Creamos un calendario en este casa del mes de octubre
+  cal 10 2023 > calendarioOctubre2023.txt ; Redirigimos el calendario a un fichero .txt
+
+  cat calendarioOctubre2023.txt ;Comprobamos que el fichero se crea correctamente y su contenido es el esperado
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  October 2023      
+  Su Mo Tu We Th Fr Sa  
+   1  2  3  4  5  6  7  
+   8  9 10 11 12 13 14              ;Resultado
+  15 16 17 18 19 20 21  
+  22 23 24 25 26 27 28  
+  29 30 31 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+4)Copiar el fichero recién creado al directorio raíz del usuario.
+
+  cp /home/dmarta14/AS/calendarioOctubre2023.txt /home/dmarta14/ ;comando para copiar un fichero
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+5) Moverse al directorio raíz del usuario y listar en formato extendido (parámetro -l) los directorios y archivos
+  presentes. Redirigir esa información a un fichero.
+
+  cd           ; Nos movemos al directorio raiz
+  ls -l        ; Comando para listar los directorios en formato extendido
+  ls -l > listacomandos.txt  ;Redirigimos la información a un fichero 
+  cat listacomandos.txt ;Comprobamos que la ha realizado correctamente
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+6) Listar los 5 ficheros más nuevos de la carpeta /etc (que no sean carpetas).
+
+  sudo find /etc -type f -exec ls -lt {} + | head -5
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+7)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+8)
+9)
+10)
+11)
+12)
+13)
