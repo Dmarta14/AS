@@ -50,11 +50,41 @@ Esta parte está enfocada a explorar diferentes comandos del Shell y ver su efec
   sudo find /etc -type f -exec ls -lt {} + | head -5
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-7)
+7) Cambiar los permisos del fichero creado con información del calendario para que sólo el usuario propietario
+   tenga capacidad de leer y escribir.
+
+  chmod -rw  calendarioOctubre2023.txt 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-8)
-9)
-10)
-11)
-12)
-13)
+8) Cambiar permisos para evitar que ningún otro usuario pueda acceder nuestro directorio raíz.
+
+  chmod 700 /home/dmarta14/
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+9) Comprobar cuántos usuarios hay en el sistema y cual es el nuestro Shell de inicio.
+
+  sudo cat /etc/passwd | wc -l
+  echo $SHELL
+  grep dmarta14 /etc/passwd
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+10) Comprobar cuándo y desde donde accediste la última vez al sistema.
+
+  last
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+11)Comprimir en un archivo .tar.gz los contenidos del directorio $HOME. Descomprimirlos /tmp y comprobar
+que se ha hecho correctamente.
+
+ tar -czvf backuphome.tar.gz $HOME ;Comprime lo que hay en el directorio HOME
+ tar -xzvf backuphome.tar.gz -C /tmp ;Descomprime el archivo en el directorio /tmp
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+12) Como usuario “root”, buscar todos los archivos que sean propiedad de tu usuario en el sistema (desde el
+directorio raíz /) y listarlos en forma extendida (con toda la información).
+
+  sudo find / -user dmarta14 -exec ls -l {} \;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+13)Como usuario “root”, mostrar las últimas 30 líneas de /var/log/syslog.
+
+  tail -n 50 /var/log/syslog
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
