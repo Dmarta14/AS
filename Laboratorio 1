@@ -88,3 +88,59 @@ directorio raíz /) y listarlos en forma extendida (con toda la información).
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+2 Shell Scripting
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+1) Crear un script llamado lsdirs.sh que muestre los directorios contenidos en el directorio actual.
+
+  nano lsdirs.sh
+
+;Dentro del nano lsdirs.sh
+  #!/bin/bash
+
+  ls -d */    ;Comando para listar los directorios que contiene el directorio actual
+
+chmod +x lsdirs.sh       ;Le damos permisos para que ejecute el .sh
+./lsdirs.sh              ;Ejecutamos el script
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+2) Crear un script llamado see.sh que reciba un nombre de fichero/directorio como parámetro. Si el nombre
+corresponde a un fichero, el script muestra el contenido del fichero con more, sino muestra el contenido del
+directorio con ls.
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+3) Crear un script que pida al usuario que teclee una palabra y escriba por pantalla el número de caracteres de
+esa palabra.
+4) Crear un script que pida al usuario que teclee una palabra y compruebe si es un comando del sistema o no.
+5) Crear un script que cree una carpeta llamada cosas y después cree 100 ficheros vacíos llamados
+fich<numero>.txt dentro de ella, donde <numero> es un número entre 0 y 99.
+6) Extender el script anterior para que cada fichero contenga la N-sima línea del manual de ls (man ls). El fichero
+fich0.txt tendrá la línea 0 del manual, fich1.txt tendrá la línea 1 del manual, …
+7) Crear un script que modifique la extensión de todos los ficheros .txt de un directorio a .t.
+8) Crear un script borra.sh que reciba un número indefinido de parámetros (de 0 a 9) y borre el fichero
+correspondiente a la suma del valor de los parámetros que reciba. Por ejemplo, borra.sh 1 4 5 9, borraría el
+fichero fich19.txt (1 + 4 + 5 + 9 = 19).
+9) Crear un script orden.sh que muestre el contenido del fichero /etc/passwd ordenado por nombre de usuario,
+UID o GID. El script recibirá un parámetro que indique cuál de los 3 utilizar como clave de ordenación.
+10) Imagina que quieres mandar un e-mail con el mismo cuerpo a varios destinatarios, pero personalizando la
+primera línea con el nombre de cada uno. Crear un fichero cuerpo.txt con el texto del cuerpo del e-mail y la
+palabra NOMBRE en cada lugar donde querrías poner el nombre, y un fichero nombres.txt con varios
+nombres personales. Crear un script que genere varios ficheros con el cuerpo del e-mail personalizado para
+cada destinatario.
+
+
+
+
+
+
+
+
+
+
+
+
+
