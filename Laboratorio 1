@@ -112,27 +112,78 @@ chmod +x lsdirs.sh       ;Le damos permisos para que ejecute el .sh
 corresponde a un fichero, el script muestra el contenido del fichero con more, sino muestra el contenido del
 directorio con ls.
 
+  nano see.sh
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;  !/bin/bash                                                               ;         
+;  
+;  if [ $# -ne 1 ]; then                                                    ;
+;      echo "Uso: $0 <nombre_de_fichero_o_directorio>"                      ;
+;      exit 1                                                               ; 
+;  fi                                                                       ;
+;                                                                           ; 
+;                                                                           ;          ;El script
+;  if [ -d "$1" ] ; then                                                    ;
+;          ls -l "$1"                                                       ;
+;  elif [ -f "$1" ]; then                                                   ;
+;          more "$1"                                                        ;
+;  else
+;          echo "No corresponde el nombre con ningún fichero/directorio"    ;
+;  fi                                                                       ; 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+chmod +x see.sh ;Damos permisos para la ejecución
+
+./see.sh compartir ;Ejecutamos con un parámetro en este caso un directorio
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 3) Crear un script que pida al usuario que teclee una palabra y escriba por pantalla el número de caracteres de
 esa palabra.
+
+nano  recogida.sh
+
+#!/bin/bash 
+
+
+read -p "Introduzca una palabra " palabra
+
+longitud=${#palabra}
+
+echo "La palabra '$palabra' tiene '$longitud' caracteres"
+
+
+chmod +x recogida.sh
+./recogida.sh
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 4) Crear un script que pida al usuario que teclee una palabra y compruebe si es un comando del sistema o no.
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 5) Crear un script que cree una carpeta llamada cosas y después cree 100 ficheros vacíos llamados
 fich<numero>.txt dentro de ella, donde <numero> es un número entre 0 y 99.
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 6) Extender el script anterior para que cada fichero contenga la N-sima línea del manual de ls (man ls). El fichero
-fich0.txt tendrá la línea 0 del manual, fich1.txt tendrá la línea 1 del manual, …
+fich0.txt tendrá la línea 0 del manual, fich1.txt tendrá la línea 1 del manual, 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 7) Crear un script que modifique la extensión de todos los ficheros .txt de un directorio a .t.
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 8) Crear un script borra.sh que reciba un número indefinido de parámetros (de 0 a 9) y borre el fichero
 correspondiente a la suma del valor de los parámetros que reciba. Por ejemplo, borra.sh 1 4 5 9, borraría el
 fichero fich19.txt (1 + 4 + 5 + 9 = 19).
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 9) Crear un script orden.sh que muestre el contenido del fichero /etc/passwd ordenado por nombre de usuario,
 UID o GID. El script recibirá un parámetro que indique cuál de los 3 utilizar como clave de ordenación.
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 10) Imagina que quieres mandar un e-mail con el mismo cuerpo a varios destinatarios, pero personalizando la
 primera línea con el nombre de cada uno. Crear un fichero cuerpo.txt con el texto del cuerpo del e-mail y la
 palabra NOMBRE en cada lugar donde querrías poner el nombre, y un fichero nombres.txt con varios
 nombres personales. Crear un script que genere varios ficheros con el cuerpo del e-mail personalizado para
 cada destinatario.
 
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 
