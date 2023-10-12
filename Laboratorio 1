@@ -158,13 +158,58 @@ chmod +x recogida.sh
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 4) Crear un script que pida al usuario que teclee una palabra y compruebe si es un comando del sistema o no.
 
+  nano comando.sh
+
+  #!/bin/bash
+
+# Solicitar al usuario que ingrese una palabra
+read -p "Por favor, ingrese una palabra: " palabra
+
+# Comprobar si la palabra es un comando del sistema
+if type "$palabra" &> /dev/null; then
+    echo "'$palabra' es un comando del sistema."
+else
+    echo "'$palabra' no es un comando del sistema."
+fi
+
+chmod +x comando.sh
+./comando.sh
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 5) Crear un script que cree una carpeta llamada cosas y después cree 100 ficheros vacíos llamados
 fich<numero>.txt dentro de ella, donde <numero> es un número entre 0 y 99.
 
+  nano crearficheros.sh
+
+  #!/bin/bash
+
+  mkdir cosas
+  cd cosas
+
+  for i in {0..99}; do
+        touch fichero"$i".txt;
+  done
+
+  chmod +x crearficheros.sh
+  ./crearficheros.sh
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 6) Extender el script anterior para que cada fichero contenga la N-sima línea del manual de ls (man ls). El fichero
 fich0.txt tendrá la línea 0 del manual, fich1.txt tendrá la línea 1 del manual, 
+
+#!/bin/bash
+
+if [ ! -d "cosas" ]; then
+    mkdir cosas
+fi
+cd cosas
+
+man ls | head -n 100 > manual_ls_temp.txt
+
+for i in {0..99}; do
+        sed -n '${i}p' manual_ls_temp.txt > "fichero$i.txt"
+done
+rm manual_ls_temp.txt
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 7) Crear un script que modifique la extensión de todos los ficheros .txt de un directorio a .t.
 
