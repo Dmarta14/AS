@@ -1,4 +1,8 @@
 2 Gestión básica
+
+lsblk -e7 ;Desglose de los discos con sus particiones
+
+
 En esta parte del laboratorio propone unas tareas de manipulación básica de particiones:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 1)  En el disco recién creado, crear 4 particiones de 1GB cada una y formatearlas: una de ellas será ext3, otra
@@ -64,6 +68,65 @@ En esta parte del laboratorio propone unas tareas de manipulación básica de pa
     
     sudo nano /etc/fstab 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+3 Comparativa de rendimiento
+Como se ha visto en las diapositivas de este tema, Google Cloud ofrece diferentes tipos de discos que se pueden usar
+en las máquinas virtuales de Compute Engine. La documentación indica el precio asociado a cada tipo de disco, pero
+no se detallan valores concretos de rendimiento.
+Para poder conocer las capacidades de los diferentes discos, se pueden utilizar herramientas de benchmark que
+realizan pruebas de stress para caracterizar el rendimiento. Estas pruebas son útiles para conocer si un disco (o
+sistema de ficheros) está siendo un cuello de botella para las aplicaciones en uso. En este apartado se proponen
+diferentes tareas con el benchmark fio:
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+1)Borrar las particiones creadas en el disco en la sección anterior. En este ejercicio nos referiremos a este disco
+como balanceado.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+2)Añadir un nuevo disco de 10 GB de tipo “SSD” a la máquina virtual. En este ejercicio nos referiremos a este
+disco como SSD.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+3)En ambos discos, crear 1 partición de 4 GB y formatearla como Ext4. Montar la partición del disco
+balanceado en el directorio /discoBalanceado y la partición del disco SSD en el directorio /discoSSD. No es
+necesario configurar los montajes para que se realicen en el arranque del sistema.
+mkdir /tmp/discoBalanceado
+mkdir /tmp/discoSSD
+sudo mount -t ext4 /dev/sdb1 /tmp/discoSSD
+sudo mount -t ext4 /dev/sdc1 /tmp/discoBalanceado/
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+4)Revisar la 1ª sección de este artículo para aprender a realizar una prueba de rendimiento con fio.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+5)Instalar fio en el sistema siguiendo el comando que se indica en el artículo.
+
+apt install fio
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+6)  Utilizar fio para realizar la siguiente prueba:
+    a. Creación de un fichero de contenido aleatorio de 1 GB.
+    b. Mezcla de 75% y 25 % entre operaciones de lectura y escritura.
+    c. Resto de parámetro por defecto (cómo indicados en el ejemplo del artículo).
+    Esta prueba se debe realizar con ambos discos. El nombre del fichero que se utilice es indiferente, pero debe
+    estar dentro de cada carpeta /disco correspondiente en cada prueba.
+    Los valores más representativos de las pruebas son las métricas de velocidad de lectura (READ) y escritura
+    (WRITE), que se encuentran entre las últimas líneas que genera fio. Estos valores se indican en kB/s o MB/s,
+    ¿qué diferencia hay entre ambos discos?
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+7)   Repetir la prueba anterior, esta vez utilizando una mezcla de 50% de operaciones de lectura y 50% de
+    operaciones de escritura. ¿Varían los resultados respecto a la 1ª prueba?
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+8)  Revisar el precio de los discos de tipo balanceado y SSD en Google Cloud. ¿La diferencia de precio es
+    proporcional con la diferencia de rendimiento?
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+9)  Desmontar y eliminar el disco de tipo SSD.
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+
 
 
 
