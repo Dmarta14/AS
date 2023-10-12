@@ -4,13 +4,33 @@ En esta parte del laboratorio propone unas tareas de manipulación básica de pa
 1)  En el disco recién creado, crear 4 particiones de 1GB cada una y formatearlas: una de ellas será ext3, otra
     btrfs, otra xfs y última ext4.
 
-
+    sudo cfdisk /dev/sdb
+    sudo mkfs.ext3 /dev/sdb1
+    sudo mkfs.btrfs /dev/sdb2 
+    sudo mkfs.xfs /dev/sdb3
+    sudo mkfs.ext4 /dev/sdb4
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 2)  Configurar un montaje automático de las particiones (al arranque de la máquina virtual) en /disco[X] donde
     X es 1, 2, 3, 4. Se recomienda seguir estos 1 pasos. Verificar que los montajes se mantienen al reiniciar la
     maquina.En caso de que la MV no arranque o no permita acceso vía SSH por problemas de configuración, se puede
     iniciar una terminal mínima llamada “consola serie” que provee acceso root para resolver incidencias 2 .
 
+    mkdir /tmp/disco1
+    mkdir /tmp/disco2
+    mkdir /tmp/disco3
+    mkdir /tmp/disco4
+
+    sudo nano /etc/fstab
+    LABEL=cloudimg-rootfs   /        ext4   discard,errors=remount-ro       0 1
+    LABEL=UEFI      /boot/efi       vfat    umask=0077      0 1
+
+    /dev/sdb1       /tmp/disco1     ext3    defaults        0 0
+    /dev/sdb2       /tmp/disco2     btrfs   defaults        0 0
+    /dev/sdb3       /tmp/disco3     xfs     defaults        0 0
+    /dev/sdb4       /tmp/disco4     ext4    defaults        0 0
+
+    sudo mount -a
+    mount
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 3) ¿Cuál de los sistemas de ficheros creados ocupa más espacio?
