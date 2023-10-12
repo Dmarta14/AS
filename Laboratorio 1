@@ -213,13 +213,94 @@ rm manual_ls_temp.txt
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 7) Crear un script que modifique la extensión de todos los ficheros .txt de un directorio a .t.
 
+nano cambiarextension.sh
+
+#!/bin/bash
+
+directorio="/home/dmarta14/cosas"
+
+
+for archivo in "$directorio"/*.txt; do
+    nuevo_nombre="${archivo%.txt}.t"
+    mv "$archivo" "$nuevo_nombre"
+done
+
+chmod +x cambiarextension.sh
+./cambiarextension.sh
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 8) Crear un script borra.sh que reciba un número indefinido de parámetros (de 0 a 9) y borre el fichero
 correspondiente a la suma del valor de los parámetros que reciba. Por ejemplo, borra.sh 1 4 5 9, borraría el
 fichero fich19.txt (1 + 4 + 5 + 9 = 19).
+
+
+nano borrar.sh
+
+#!/bin/bash
+
+# Verificar si se proporciona al menos un parámetro
+if [ $# -eq 0 ]; then
+    echo "Uso: $0 <número1> <número2> ... <númeroN>"
+    exit 1
+fi
+
+suma=0
+for i in $@ ; do
+        suma=$(( suma + i))
+done
+
+echo "la suma total es: $suma "
+echo "Por lo tanto se borra el fichero$suma.t"
+cd cosas
+
+if [ -e fichero$suma.t ] ; then 
+        rm fichero$suma.t
+else
+        echo "No existe ningun fichero con ese número"
+fi
+
+
+chmod +x borrar.sh
+./borrar.sh 1 2 3 4 5 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 9) Crear un script orden.sh que muestre el contenido del fichero /etc/passwd ordenado por nombre de usuario,
 UID o GID. El script recibirá un parámetro que indique cuál de los 3 utilizar como clave de ordenación.
+
+  nano orden.sh
+
+#!/bin/bash
+
+if [ $# -eq 0 ]; then 
+
+        echo "./orden.sh <nombre-usuario>/<GID>/<UID>"
+        exit 1
+fi
+
+# Parámetro que indica cómo ordenar
+clave_ordenacion="$1"
+
+# Verificar que el parámetro es válido
+if [ "$clave_ordenacion" != "nombre" ] && [ "$clave_ordenacion" != "uid" ] && [ "$clave_ordenacion" != ">
+    echo "El parámetro debe ser 'nombre', 'uid' o 'gid'."
+    exit 1
+fi
+
+# Mostrar el contenido del archivo /etc/passwd ordenado según el parámetro
+case "$clave_ordenacion" in
+    "nombre")
+        sort -t: -k1 /etc/passwd
+        ;;
+    "uid")
+        sort -t: -n -k3 /etc/passwd
+        ;;
+    "gid")
+        sort -t: -n -k4 /etc/passwd
+        ;;
+esac
+
+chmod +x orden.sh
+./orden.sh
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 10) Imagina que quieres mandar un e-mail con el mismo cuerpo a varios destinatarios, pero personalizando la
