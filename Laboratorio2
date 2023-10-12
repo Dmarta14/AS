@@ -1,25 +1,39 @@
 2 Gestión básica
 En esta parte del laboratorio propone unas tareas de manipulación básica de particiones:
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 1)  En el disco recién creado, crear 4 particiones de 1GB cada una y formatearlas: una de ellas será ext3, otra
     btrfs, otra xfs y última ext4.
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 2)  Configurar un montaje automático de las particiones (al arranque de la máquina virtual) en /disco[X] donde
     X es 1, 2, 3, 4. Se recomienda seguir estos 1 pasos. Verificar que los montajes se mantienen al reiniciar la
     maquina.En caso de que la MV no arranque o no permita acceso vía SSH por problemas de configuración, se puede
     iniciar una terminal mínima llamada “consola serie” que provee acceso root para resolver incidencias 2 .
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 3) ¿Cuál de los sistemas de ficheros creados ocupa más espacio?
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 4)¿Es posible acceder a una partición ext3 que ha sido montada como ext4? ¿Y al revés? ¿Por qué?
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 5)Desmontar y borrar las 3 últimas particiones. Crear una única partición ext4 de 8 GB.
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 6)Copiar el contenido del directorio /var en la nueva partición ext4 que acabas de crear. Después,
   redimensionar la partición para que sea lo más pequeña posible.
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 7)Eliminar la configuración de montaje automático realizada en el 2º paso.
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 
