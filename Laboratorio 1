@@ -309,6 +309,51 @@ palabra NOMBRE en cada lugar donde querrías poner el nombre, y un fichero nombr
 nombres personales. Crear un script que genere varios ficheros con el cuerpo del e-mail personalizado para
 cada destinatario.
 
+cuerpo.txt
+Hola NOMBRE,
+
+Gracias por tu interés en nuestro producto. Esperamos que estés teniendo un buen día.
+
+Atentamente,
+[Nombre de la Empresa]
+
+nombres.txt
+Juan
+María
+Carlos
+Luisa
+
+
+generarcorreos.sh
+#!/bin/bash
+
+# Verificar si los archivos cuerpo.txt y nombres.txt existen
+if [ ! -f "cuerpo.txt" ] || [ ! -f "nombres.txt" ]; then
+    echo "Los archivos cuerpo.txt y/o nombres.txt no existen."
+    exit 1
+fi
+
+# Contador para nombres
+contador=0
+
+# Leer cada nombre de nombres.txt
+while IFS= read -r nombre
+do
+  # Crear un archivo de correo personalizado para cada destinatario
+  archivo_salida="correo_$contador.txt"
+  contador=$((contador + 1))
+  
+  # Sustituir "NOMBRE" en cuerpo.txt con el nombre actual y guardar en el archivo de salida
+  sed "s/NOMBRE/$nombre/g" cuerpo.txt > "$archivo_salida"
+  
+  echo "Se ha creado $archivo_salida."
+done < "nombres.txt"
+
+chmod +x generarcorreos.sh
+./generacorreos.sh
+
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
