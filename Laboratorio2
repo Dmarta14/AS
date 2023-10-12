@@ -35,24 +35,34 @@ En esta parte del laboratorio propone unas tareas de manipulación básica de pa
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 3) ¿Cuál de los sistemas de ficheros creados ocupa más espacio?
 
+    utilizamos el comando df -h
+    
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 4)¿Es posible acceder a una partición ext3 que ha sido montada como ext4? ¿Y al revés? ¿Por qué?
 
-
+    Puedes montar una partición ext3 como ext4 sin problemas, pero no puedes hacerlo al revés sin realizar 
+    una conversión. La conversión de ext4 a ext3 no es trivial y normalmente no se recomienda,
+    ya que implica la pérdida de característicasy puede requerir una copia de seguridad 
+    completa de los datos antes de realizarla.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 5)Desmontar y borrar las 3 últimas particiones. Crear una única partición ext4 de 8 GB.
-
+    sudo umount /tmp/disco2
+    sudo umount /tmp/disco3
+    sudo umount /tmp/disco4
+    cfdisk /dev/sdb ; Borramos las particiones anteriores y creamos la unica partición de 8GB
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 6)Copiar el contenido del directorio /var en la nueva partición ext4 que acabas de crear. Después,
   redimensionar la partición para que sea lo más pequeña posible.
 
+    sudo cp /var/* /tmp/disco1/
+    sudo resize2fs -M /dev/sdb1
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 7)Eliminar la configuración de montaje automático realizada en el 2º paso.
-
-
+    
+    sudo nano /etc/fstab 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
