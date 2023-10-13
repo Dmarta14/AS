@@ -125,6 +125,159 @@ apt install fio
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+4 Gestión avanzada
+En esta parte del laboratorio se trabaja con LVM y RAID:
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+1) Borrar las particiones creadas en las secciones anteriores en el disco.
+
+    sudo umount /dev/sdb1
+    sudo cfdisk /dev/sdb
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+2) Añadir un nuevo disco de 10 GB de tipo balanceado a la máquina virtual.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+3) Crear 2 particiones de 3 GB en cada disco. Crear un volumen lógico LVM con 3 de las 4 particiones. Crear una
+    partición ext4 en el volumen usando el 100% de espacio.
+
+    sudo cfdisk /dev/sdb
+    sudo cfdisk /dev/sdc
+    sudo vgcreate grupoVol /dev/sdb1 /dev/sdb2 /dev/sdc1
+    sudo lvcreate grupoVol -l 100%FREE -n miVolumen
+    sudo mkfs.ext4 /dev/grupoVol/miVolumen
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+4) Montar el sistema de ficheros en un directorio y comprobar su estado. Para ello, copiar alguno de los
+    directorios del sistema operativo a él.
+
+    mkdir /tmp/lvmFolder
+    sudo mount -t ext4 /dev/grupoVol/miVolumen /tmp/lvmFolder
+    sudo cp -r /var/* /tmp/lvmFolder
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+5) Añadir la 4ª partición al volumen lógico y extender el tamaño del sistema de ficheros para que ocupe el total
+ del volumen. Comprobar que los datos copiados en el paso anterior siguen estando.
+
+    sudo vgextend grupoVol /dev/sdc2
+    sudo lvextend /dev/grupoVol/miVolumen /dev/sdc2
+    sudo resize2fs /dev/grupoVol/miVolumen
+    ls /tmp/lvmFolder/
+    
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+6) Borrar el volumen lógico recién creado (utilizar los comandos LVM apropiados).
+
+    sudo umount /dev/grupoVol/miVolumen
+    sudo lvremove /dev/grupoVol/miVolumen
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+7) Crear un sistema RAID 5 con 3 de las particiones. Crear un sistema de ficheros ext4 para el sistema RAID 5 y
+   hacerlo accesible. Copiar el contenido de la carpeta /var a la carpeta del sistema RAID.
+
+    sudo mdadm --create /dev/md0 --verbose --level=5 --raid-devices=3 /dev/sdb1 /dev/sdb2 /dev/sdc1
+    sudo mkfs.ext4 /dev/md0
+    mkdir /tmp/raidFolder
+    sudo mount -t ext4 /dev/md0 /tmp/raidFolder
+    sudo cp -r /var/* /tmp/raidFolder
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+8) Simular un fallo en el tercer disco (parámetro -f). Recuperar la información perdida usando la partición que
+   quedó libre.
+
+    sudo mdadm /dev/md0 -f /dev/sdc1
+    sudo mdadm /dev/md0 -r /dev/sdc1
+    sudo mdadm /dev/md0 -a /dev/sdc2
+    cat /proc/mdstat
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+9) Desmontar y eliminar el dispositivo RAID. Eliminar el disco creado en el paso 2.
+
+    sudo umount /dev/md0
+    sudo mdadm --stop /dev/md0
+    sudo mdadm --zero-superblock /dev/sdb
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+5 Copias de seguridad
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+1 Borrar las particiones creadas en la sección anterior en el disco
+
+sudo cfdisk /dev/sdb
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+2 Crear 1 partición de 4 GB en el disco y formatearla como ext4. Montarla en un directorio llamado /backups.
+
+sudo cfdisk /dev/sdb
+sudo mkfs.ext4 /dev/sdb1
+sudo mount -t ext4 /dev/sdb1 /mnt/backups
+sudo mkdir /mnt/backups
+sudo chown $USER:$USER /mnt/backups
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+3 Instalar rsnapshot en el sistema y revisar este documento donde se detalla su configuración
+
+sudo apt install rsnapshot
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+4 Configurar rsnapshot de la siguiente forma:
+a Directorio para almacenar las copias de seguridad: /backups
+
+sudo cp /etc/rsnapshot.conf /etc/rsnapshot.conf.default
+sudo nano /etc/rsnapshot.conf
+
+###########################
+# SNAPSHOT ROOT DIRECTORY #
+###########################
+
+# All snapshots will be stored under this root directory.
+#
+snapshot_root   /mnt/backups/
+
+b Niveles de copia e intervalos
+
+#########################################
+#     BACKUP LEVELS / INTERVALS         #
+# Must be unique and in ascending order #
+# e.g. alpha, beta, gamma, etc.         #
+#########################################
+
+retain  hourly  24
+retain  daily   7
+retain  weekly  4
+
+c Directorios a guardar (todos se almacenan en el directorio /backups): /home, /etc y /var/log
+
+###############################
+### BACKUP POINTS / SCRIPTS ###
+###############################
+
+# LOCALHOST
+backup  /home/          localhost/
+backup  /etc/           localhost/
+#backup /usr/local/     localhost/
+backup  /var/log        localhost/
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+5 Verificar que la configuración es correcta con el comando rsnapshot configtest.
+
+rsnapshot configtest
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+6 Realizar una copia de tipo “horaria” y revisar que los contenidos se han copiado correctamente.
+
+sudo rsnapshot hourly
+ls /mnt/backups/hourly.0/
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+7 Crear una carpeta y un fichero nuevo en el directorio /home de tu usuario (incluye algo de texto en el fichero). Después, realizar una nueva copia de tipo “horaria”
+
+mkdir prueba
+echo "Hola Mundo" > prueba/prueba.txt
+sudo rsnapshot hourly
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+8 Verificar que la nueva copia se ha hecho correctamente y revisar los cambios entre ambas copias con el comando rsnapshot-diff.
+
+ls /mnt/backups/hourly.1/
+sudo rsnapshot-diff -vH /mnt/backups/hourly.0/ /mnt/backups/hourly.1/
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 
