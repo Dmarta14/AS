@@ -4,7 +4,7 @@ lsblk -e7 ;Desglose de los discos con sus particiones
 
 
 En esta parte del laboratorio propone unas tareas de manipulación básica de particiones:
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+##############################################################################################################
 1)  En el disco recién creado, crear 4 particiones de 1GB cada una y formatearlas: una de ellas será ext3, otra
     btrfs, otra xfs y última ext4.
 
@@ -13,7 +13,7 @@ En esta parte del laboratorio propone unas tareas de manipulación básica de pa
     sudo mkfs.btrfs /dev/sdb2 
     sudo mkfs.xfs /dev/sdb3
     sudo mkfs.ext4 /dev/sdb4
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+##############################################################################################################
 2)  Configurar un montaje automático de las particiones (al arranque de la máquina virtual) en /disco[X] donde
     X es 1, 2, 3, 4. Se recomienda seguir estos 1 pasos. Verificar que los montajes se mantienen al reiniciar la
     maquina.En caso de que la MV no arranque o no permita acceso vía SSH por problemas de configuración, se puede
@@ -36,38 +36,38 @@ En esta parte del laboratorio propone unas tareas de manipulación básica de pa
     sudo mount -a
     mount
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+##############################################################################################################
 3) ¿Cuál de los sistemas de ficheros creados ocupa más espacio?
 
     utilizamos el comando df -h
     
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+##############################################################################################################
 4)¿Es posible acceder a una partición ext3 que ha sido montada como ext4? ¿Y al revés? ¿Por qué?
 
     Puedes montar una partición ext3 como ext4 sin problemas, pero no puedes hacerlo al revés sin realizar 
     una conversión. La conversión de ext4 a ext3 no es trivial y normalmente no se recomienda,
     ya que implica la pérdida de característicasy puede requerir una copia de seguridad 
     completa de los datos antes de realizarla.
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+##############################################################################################################
 5)Desmontar y borrar las 3 últimas particiones. Crear una única partición ext4 de 8 GB.
     sudo umount /tmp/disco2
     sudo umount /tmp/disco3
     sudo umount /tmp/disco4
     cfdisk /dev/sdb ; Borramos las particiones anteriores y creamos la unica partición de 8GB
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+##############################################################################################################
 6)Copiar el contenido del directorio /var en la nueva partición ext4 que acabas de crear. Después,
   redimensionar la partición para que sea lo más pequeña posible.
 
     sudo cp /var/* /tmp/disco1/
     sudo resize2fs -M /dev/sdb1
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+##############################################################################################################
 7)Eliminar la configuración de montaje automático realizada en el 2º paso.
     
     sudo nano /etc/fstab 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+##############################################################################################################
 
 
 3 Comparativa de rendimiento
@@ -79,13 +79,13 @@ realizan pruebas de stress para caracterizar el rendimiento. Estas pruebas son �
 sistema de ficheros) está siendo un cuello de botella para las aplicaciones en uso. En este apartado se proponen
 diferentes tareas con el benchmark fio:
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+##############################################################################################################
 1)Borrar las particiones creadas en el disco en la sección anterior. En este ejercicio nos referiremos a este disco
 como balanceado.
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+##############################################################################################################
 2)Añadir un nuevo disco de 10 GB de tipo “SSD” a la máquina virtual. En este ejercicio nos referiremos a este
 disco como SSD.
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+##############################################################################################################
 3)En ambos discos, crear 1 partición de 4 GB y formatearla como Ext4. Montar la partición del disco
 balanceado en el directorio /discoBalanceado y la partición del disco SSD en el directorio /discoSSD. No es
 necesario configurar los montajes para que se realicen en el arranque del sistema.
@@ -94,15 +94,15 @@ mkdir /tmp/discoSSD
 sudo mount -t ext4 /dev/sdb1 /tmp/discoSSD
 sudo mount -t ext4 /dev/sdc1 /tmp/discoBalanceado/
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+##############################################################################################################
 4)Revisar la 1ª sección de este artículo para aprender a realizar una prueba de rendimiento con fio.
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+##############################################################################################################
 
 5)Instalar fio en el sistema siguiendo el comando que se indica en el artículo.
 
 apt install fio
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+##############################################################################################################
 6)  Utilizar fio para realizar la siguiente prueba:
     a. Creación de un fichero de contenido aleatorio de 1 GB.
     b. Mezcla de 75% y 25 % entre operaciones de lectura y escritura.
@@ -113,28 +113,28 @@ apt install fio
     (WRITE), que se encuentran entre las últimas líneas que genera fio. Estos valores se indican en kB/s o MB/s,
     ¿qué diferencia hay entre ambos discos?
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+##############################################################################################################
 7)   Repetir la prueba anterior, esta vez utilizando una mezcla de 50% de operaciones de lectura y 50% de
     operaciones de escritura. ¿Varían los resultados respecto a la 1ª prueba?
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+##############################################################################################################
 8)  Revisar el precio de los discos de tipo balanceado y SSD en Google Cloud. ¿La diferencia de precio es
     proporcional con la diferencia de rendimiento?
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+##############################################################################################################
 9)  Desmontar y eliminar el disco de tipo SSD.
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+##############################################################################################################
 
 4 Gestión avanzada
 En esta parte del laboratorio se trabaja con LVM y RAID:
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+##############################################################################################################
 1) Borrar las particiones creadas en las secciones anteriores en el disco.
 
     sudo umount /dev/sdb1
     sudo cfdisk /dev/sdb
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+##############################################################################################################
 2) Añadir un nuevo disco de 10 GB de tipo balanceado a la máquina virtual.
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+##############################################################################################################
 3) Crear 2 particiones de 3 GB en cada disco. Crear un volumen lógico LVM con 3 de las 4 particiones. Crear una
     partición ext4 en el volumen usando el 100% de espacio.
 
@@ -144,7 +144,7 @@ En esta parte del laboratorio se trabaja con LVM y RAID:
     sudo lvcreate grupoVol -l 100%FREE -n miVolumen
     sudo mkfs.ext4 /dev/grupoVol/miVolumen
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+##############################################################################################################
 4) Montar el sistema de ficheros en un directorio y comprobar su estado. Para ello, copiar alguno de los
     directorios del sistema operativo a él.
 
@@ -152,7 +152,7 @@ En esta parte del laboratorio se trabaja con LVM y RAID:
     sudo mount -t ext4 /dev/grupoVol/miVolumen /tmp/lvmFolder
     sudo cp -r /var/* /tmp/lvmFolder
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+##############################################################################################################
 5) Añadir la 4ª partición al volumen lógico y extender el tamaño del sistema de ficheros para que ocupe el total
  del volumen. Comprobar que los datos copiados en el paso anterior siguen estando.
 
@@ -161,13 +161,13 @@ En esta parte del laboratorio se trabaja con LVM y RAID:
     sudo resize2fs /dev/grupoVol/miVolumen
     ls /tmp/lvmFolder/
     
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+##############################################################################################################
 6) Borrar el volumen lógico recién creado (utilizar los comandos LVM apropiados).
 
     sudo umount /dev/grupoVol/miVolumen
     sudo lvremove /dev/grupoVol/miVolumen
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+##############################################################################################################
 7) Crear un sistema RAID 5 con 3 de las particiones. Crear un sistema de ficheros ext4 para el sistema RAID 5 y
    hacerlo accesible. Copiar el contenido de la carpeta /var a la carpeta del sistema RAID.
 
@@ -176,7 +176,7 @@ En esta parte del laboratorio se trabaja con LVM y RAID:
     mkdir /tmp/raidFolder
     sudo mount -t ext4 /dev/md0 /tmp/raidFolder
     sudo cp -r /var/* /tmp/raidFolder
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+##############################################################################################################
 8) Simular un fallo en el tercer disco (parámetro -f). Recuperar la información perdida usando la partición que
    quedó libre.
 
@@ -184,23 +184,23 @@ En esta parte del laboratorio se trabaja con LVM y RAID:
     sudo mdadm /dev/md0 -r /dev/sdc1
     sudo mdadm /dev/md0 -a /dev/sdc2
     cat /proc/mdstat
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+##############################################################################################################
 9) Desmontar y eliminar el dispositivo RAID. Eliminar el disco creado en el paso 2.
 
     sudo umount /dev/md0
     sudo mdadm --stop /dev/md0
     sudo mdadm --zero-superblock /dev/sdb
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+##############################################################################################################
 
 
 5 Copias de seguridad
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+##############################################################################################################
 
 1 Borrar las particiones creadas en la sección anterior en el disco
 
 sudo cfdisk /dev/sdb
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+##############################################################################################################
 
 2 Crear 1 partición de 4 GB en el disco y formatearla como ext4. Montarla en un directorio llamado /backups.
 
@@ -209,12 +209,12 @@ sudo mkfs.ext4 /dev/sdb1
 sudo mount -t ext4 /dev/sdb1 /mnt/backups
 sudo mkdir /mnt/backups
 sudo chown $USER:$USER /mnt/backups
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+##############################################################################################################
 
 3 Instalar rsnapshot en el sistema y revisar este documento donde se detalla su configuración
 
 sudo apt install rsnapshot
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+##############################################################################################################
 
 4 Configurar rsnapshot de la siguiente forma:
 a Directorio para almacenar las copias de seguridad: /backups
@@ -254,30 +254,29 @@ backup  /etc/           localhost/
 #backup /usr/local/     localhost/
 backup  /var/log        localhost/
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+##############################################################################################################
 5 Verificar que la configuración es correcta con el comando rsnapshot configtest.
 
 rsnapshot configtest
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+##############################################################################################################
 
 6 Realizar una copia de tipo “horaria” y revisar que los contenidos se han copiado correctamente.
 
 sudo rsnapshot hourly
 ls /mnt/backups/hourly.0/
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+##############################################################################################################
 
 7 Crear una carpeta y un fichero nuevo en el directorio /home de tu usuario (incluye algo de texto en el fichero). Después, realizar una nueva copia de tipo “horaria”
 
 mkdir prueba
 echo "Hola Mundo" > prueba/prueba.txt
 sudo rsnapshot hourly
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+##############################################################################################################
 8 Verificar que la nueva copia se ha hecho correctamente y revisar los cambios entre ambas copias con el comando rsnapshot-diff.
 
 ls /mnt/backups/hourly.1/
 sudo rsnapshot-diff -vH /mnt/backups/hourly.0/ /mnt/backups/hourly.1/
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+##############################################################################################################
 
 
 
