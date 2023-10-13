@@ -1,1 +1,31 @@
+1 Gestión de recursos del sistema
+Esta parte del laboratorio propone unas tareas para trabajar con los comandos relacionados con la monitorización
+y gestión de los recursos del sistema.
+1)  Obtener el número de procesos en ejecución en el sistema.
+2)  Obtener el número de procesos en ejecución que pertenezcan a usuario root.
+3)  Instalar el paquete “stress-ng”. Ejecutar el benchmark para 1 núcleo de CPU y 20 segundos.
+4)  Ejecutar de nuevo “stress-ng”, esta vez sin límite de tiempo. Mientras esté en ejecución:
+      a. Usar una señal para pausar su ejecución.
+      b. Usar una señal para reanudar su ejecución.
+      c. Reducir la prioridad del proceso al mínimo. ¿Cambia algo?
+5)  Detectar qué proceso tiene la mayor prioridad en el sistema. Buscar cuál es el propósito de ese proceso.
+6)  Limitar el máximo tiempo de uso de CPU a 5 minutos para todos los usuarios.
+7)  Crear un fichero crontab para el usuario root con las siguientes tareas:
+      a. Ejecutar el comando date cada minuto y escribir su salida estándar al fichero /tmp/date.log (se debe
+      escribir al final del fichero cada vez).
+      b. Borrar el directorio /tmp los primeros 5 días de cada mes a las 17:00.
+8)  Comprobar que las tareas de cron funcionan correctamente (ver el fichero /tmp/date.log).
 
+
+Las siguientes tareas del laboratorio son relativas a las conexiones de red y se propone trabajar en parejas. Seréis A
+y B, y cada uno utilizará su propia máquina virtual:
+
+9)  Usando netcat, A abre una conexión a la escucha en el puerto 3000. Si fuese necesario abrir puertos de
+    Google Cloud, se recomienda este tutorial 1 . B se conecta a ese puerto y escribe el mensaje “Hola A”. Tras
+    recibirlo, en la misma conexión, B escribe “Hola B” y cierra la conexión.
+10) El comando “dd if=/dev/urandom” sirve para generar números aleatorios. A abre una conexión a la escucha
+en el puerto 3000 y B envía números aleatorios a esa conexión de A. Sin cerrar la conexión, A y B utilizan
+nethogs para comprobar la tasa de bytes enviados y recibidos en cada parte. ¿Los valores coinciden?
+Después, A cierra la conexión.
+11) A crea localmente un fichero con texto aleatorio. Utilizar netcat para que A envíe este fichero a B. ¿Qué
+diferencia hay entre utilizar netcat y scp para enviar ficheros entre diferentes máquinas?
