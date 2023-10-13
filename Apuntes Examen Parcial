@@ -5,10 +5,10 @@ vim .bashrc
 
 source .bashrc
 .bash_history > historia.txt
+sudo cp -r /home/dmarta14/.bash_history /home/dmarta14/dmarta14_history
 
 ---COPIAR DE GOOGLE CLOUD A MI PC---
-scp unai@IP:/home/unai/mifichero.tar.gz /home/unai/Escritorio
-
+scp dmarta14@IP:/home/dmarta14/carpeta.tar.gz /home/dmarta14/Escritorio
 ---1.1.ADMINISTRACIÓN EN LINUX---
 -Listar sólo ficheros --> ls -F | grep /
 -Listar en orden de modificación --> ls -lt
