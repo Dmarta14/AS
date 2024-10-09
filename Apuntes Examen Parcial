@@ -9,18 +9,27 @@ sudo cp -r /home/dmarta14/.bash_history /home/dmarta14/dmarta14_history
 
 ---COPIAR DE GOOGLE CLOUD A MI PC---
 scp dmarta14@IP:/home/dmarta14/carpeta.tar.gz /home/dmarta14/Escritorio
+
+
 ---1.1.ADMINISTRACIÓN EN LINUX---
 -Listar sólo ficheros --> ls -F | grep /
+
 -Listar en orden de modificación --> ls -lt
+
 -Comprimir:
   tar -cvf name.tar /dir
   tar -cvzf name.tar.zp /dir
+
 -Descomprimir:
   tar -xvf name.tar     o     tar -xvf name.tar -C /dir
   tar -xvzf name.tar    o     tar -xvzf name.tar -C /dir
+
 -Variable de entorno --> export VAR="value"
+
 -Modificar extensión --> mv $file "${file.txt}".t
+
 -Sustituir palabra --> sed -i "s/PAL/$palsustituta" $ficherosustituir.txt
+
 -Ordenar por separador --> sort -t ':' -k2 /fich
 
 ---1.2.SISTEMAS DE FICHEROS---
