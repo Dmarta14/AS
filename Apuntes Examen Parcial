@@ -527,6 +527,109 @@ Ejercicio 3
 		$ sudo crontab -e
 
 
+Ejercicio 4
+
+
+#Crear la carpeta /Ej4Examen y asignar permisos
+	1.Crear la carpeta /Ej4Examen y asignar permisos
+
+		$ sudo mkdir /Ej4Examen
+
+
+	2.Asignar permisos de lectura y escritura al usuario:
+
+		$ sudo chown $USER:$USER /Ej4Examen
+		$ sudo chmod 700 /Ej4Examen
+
+
+#Instalar el servidor NFS
+	1.Instalar NFS:
+
+		$ sudo apt update
+		$ sudo apt install nfs-kernel-server
+
+
+#Exportar la carpeta /Ej4Examen
+	1.Configurar las exportaciones NFS: Edita el archivo /etc/exports:
+
+		$ sudo nano /etc/exports
+
+		Añadir
+      		/Ej4Examen *(ro,root_squash,no_subtree_check)
+		o la de arriba o la de abajo (mejor la de abajo creo)
+		/Ej4Examen 127.0.0.1(rw,sync,no_subtree_check,all_squash,anonuid=nobody,anongid=nogroup)
+
+	
+	2.Aplicar los cambios de exportación:
+
+		$ sudo exportfs -a
+
+#Instalar el cliente NFS y montar la carpeta
+	1.Instalar el cliente NFS:
+
+		$ sudo apt install nfs-common
+	
+	2.Crear el punto de montaje:
+
+		$ sudo mkdir /montajeNfs
+
+	3.Montar la carpeta:
+
+		$ sudo mount 127.0.0.1:/Ej4Examen /montajeNfs
+		$ sudo mount *:/Ej4Examen /montajeNfs
+		$ sudo mount miIp:/Ej4Examen /montajeNfs
+		PROBAR
+
+#Crear un archivo de 100 MB con datos aleatorios
+	1.Crear el archivo:
+
+		$ sudo dd if=/dev/urandom of=/montajeNfs/archivo_random bs=1M count=100
+
+#Modificar la configuración de NFS a sólo lectura
+	1.Editar el archivo de exportaciones nuevamente:
+
+		$ sudo nano /etc/exports
+
+		Cambia la línea de exportación a:
+
+		/Ej4Examen 127.0.0.1(ro,sync,no_subtree_check)
+
+	2.Aplicar los cambios:
+
+		$ sudo exportfs -ra
+
+
+
+#Obtener las tasas de transferencia del disco
+	1.Intentar crear un archivo:
+
+		$ echo "Hola" > /montajeNfs/hola.txt
+
+#Intentar crear un archivo en /montajeNfs
+	1.Instalar iostat (si no está instalado):
+
+		$ sudo apt install sysstat
+
+
+	2.Obtener estadísticas de disco:
+
+		$ iostat -d -k 1
+
+#Crear un archivo de comandos
+	1.Crear el archivo Ej4_comandos_bd:
+
+		$ nano Ej4_comandos_bd
+
+#Hacer copia de seguridad de archivos de configuración
+	1.Hacer una copia de seguridad de los archivos modificados:
+
+		$ sudo cp /etc/exports /etc/exports.bak
+
+	2.Renombrar la copia de seguridad:
+
+		$ sudo mv /etc/exports.bak Ej4_etc_exports.bak
+
+
 
 
 
