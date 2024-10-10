@@ -79,7 +79,10 @@ scp dmarta14@IP:/home/dmarta14/carpeta.tar.gz /home/dmarta14/Escritorio
   -ls /tmp/lvmFolder/
 -RAID:
   -sudo apt install mdadm rsync initramfs-tools -y
+  
+  -sudo mdadm --create /dev/md0 --verbose --level=5 --raid-devices=3 /dev/sdb1 /dev/sdb2 /dev/sdc1
   -sudo mdadm -C /dev/md0  -l raid(1-5) -n 2 /dev/sdb1 /dev/sdb2
+  
   -sudo mdadm --detail /dev/md0				(Para comprobar que este bien)
   -sudo mkfs.ext3 /dev/md0
   -sudo mkdir /miRaid
