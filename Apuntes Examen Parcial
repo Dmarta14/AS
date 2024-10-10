@@ -73,7 +73,10 @@ scp dmarta14@IP:/home/dmarta14/carpeta.tar.gz /home/dmarta14/Escritorio
   -sudo umount /miVol
   -sudo lvremove /dev/volumen1/volumen1			(Eliminar un volumen lógico)
   -sudo vgremove volumen				(Eliminar un grupo de volumenes)
-
+  -sudo vgextend volumen1 /dev/sdc2
+  -sudo lvextend /dev/volumen1/volumen1 /dev/sdc2
+  -sudo resize2fs /dev/volumen1/volumen1
+  -ls /tmp/lvmFolder/
 -RAID:
   -sudo apt install mdadm rsync initramfs-tools -y
   -sudo mdadm -C /dev/md0  -l raid(1-5) -n 2 /dev/sdb1 /dev/sdb2
