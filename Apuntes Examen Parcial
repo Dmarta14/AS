@@ -289,3 +289,250 @@ for i in {1..3}; do
         fi
 done
 echo "El mayor es: $maximo GFLOPS"
+
+
+
+
+
+
+
+Ejercicio 1
+
+Para realizar este ejercicio, es necesario utilizar el fichero *users txt disponible en el apartado Evaluación de eGela.
+Este fichero contiene los nombres de 5 cuentas de usuario. Teniendo este fichero en cuenta, realizar un script que:
+-Pide al usuario el nombre de un fichero
+-Verifica si el fichero existe en la misma carpeta donde se ejecuta el script.
+-Si el fichero no existe:
+	- Muestra un mensaje "Fichero inexistente".
+	- Crea un enlace simbólico a /tmp llamado temporal en el directorio SHOME de vuestro usuario.
+-Si el fichero existe:
+	- Por cada cuenta de usuario listada en el fichero, verifica si la cuenta existe en el sistema. De ser asi,
+	muestra el nombre de la cuenta y su Shell de inicio.
+	-Muestra el número total de cuentas de usuario listadas en el fichero que existen en el sistema.
+Entregar un fichero llamado "Ej1.sh" con el script.
+
+nano Ej1.sh
+#!/bin/bash
+
+# Pedir al usuario el nombre de un fichero
+echo "Introduce el nombre del fichero:"
+read fichero
+
+# Verificar si el fichero existe en el directorio actual
+if [ ! -f "$fichero" ]; then
+    echo "Fichero inexistente."
+    
+    # Crear un enlace simbólico llamado "temporal" en el directorio de inicio del usuario
+    ln -s /tmp "$HOME/temporal"
+    echo "Enlace simbólico 'temporal' creado en el directorio $HOME apuntando a /tmp."
+
+else
+    # Si el fichero existe, procesar las cuentas de usuario listadas en él
+    total_usuarios=0
+    cuentas_existentes=0
+
+    while read -r usuario; do
+        # Verificar si la cuenta de usuario existe en el sistema
+        if id "$usuario" &>/dev/null; then
+            # Mostrar el nombre de la cuenta y su Shell de inicio
+            shell=$(getent passwd "$usuario" | cut -d: -f7)
+            echo "Cuenta de usuario: $usuario"
+            echo "Shell de inicio: $shell"
+            cuentas_existentes=$((cuentas_existentes + 1))
+        fi
+        total_usuarios=$((total_usuarios + 1))
+    done < "$fichero"
+
+    # Mostrar el número total de cuentas de usuario que existen en el sistema
+    echo "Número total de cuentas de usuario listadas en el fichero: $total_usuarios"
+    echo "Número de cuentas que existen en el sistema: $cuentas_existentes"
+fi
+
+
+chmod +x Ej1.sh
+./Ej1.sh
+
+
+Ejercicio 2
+
+Utilizar 1 disco duro de 10 GB para realizar las siguientes tareas:
+
+# Crear 6 particiones de 1 GB en el disco.
+sudo cfdisk /dev/sdb
+
+# Formatear 1 de las particiones como ext4 y otra de las particiones como xfs.
+sudo mkfs.ext4 /dev/sdb1
+sudo mkfs.xfs /dev/sdb2
+
+# Montar la particion ext4 en /discoExt4.
+sudo mkdir /discoExt4
+sudo mount /dev/sdb1 /discoExt4
+
+# Montar la partición xfs en /discoXfs y configurar su montaje automático al inicio del sistema.
+sudo mkdir /discoXfs
+sudo mount /dev/sdb2 /discoXfs
+
+nano /etc/fstab
+/dev/sdb2 /discoXfs xfs defaults 0 0
+
+# Utilizar 3 de las 4 particiones sin formatear para crear un sistema RAID 5.
+sudo mdadm --create /dev/md0 --verbose --level=5 --raid-devices=3 /dev/sdb3 /dev/sdb4 /dev/sdb5
+
+# Formatear RAID con ext4
+sudo mkfs.ext4 /dev/md0
+sudo mkdir /raidExamen
+sudo mount /dev/md0 /raidExamen
+
+# Crear fichero de 50 MB con datos aleatorios
+sudo dd if=/dev/urandom of=/raidExamen/fichero_aleatorio bs=1M count=50
+
+# Simular fallo en el RAID y recuperar usando /dev/sdb6
+sudo mdadm /dev/md0 --fail /dev/sdb3
+sudo mdadm /dev/md0 --remove /dev/sdb3
+sudo mdadm /dev/md0 --add /dev/sdb6
+
+# Desmontar y parar el RAID
+sudo umount /raidExamen
+sudo mdadm --stop /dev/md0
+sudo mdadm --zero-superblock /dev/sdb3 /dev/sdb4 /dev/sdb5 /dev/sdb6
+
+# Desmontaje automático (eliminar de /etc/fstab)
+nano /etc/fstab
+/dev/sdb2 /discoXfs xfs defaults 0 0
+
+
+
+
+Ejercicio 3
+
+# Configuración de logs para mensajes de nivel "warning"
+	1.Abre el archivo de configuración de rsyslog
+
+		$ sudo nano /etc/rsyslog.d/50-default.conf
+
+	2.Añade la siguiente línea al final del archivo para capturar mensajes de advertencia (warning) de usuario y escribirlos en /var/log/logs.ej3
+		
+		$ user.warning /var/log/logs.ej3
+
+	3.Guarda y cierra el archivo.
+	4.Crea el archivo de log, si no existe:
+
+		$ sudo touch /var/log/logs.ej3
+		$ sudo chmod 644 /var/log/logs.ej3
+
+	5.Reinicia el servicio rsyslog para aplicar los cambios:
+
+		$ sudo systemctl restart rsyslog
+
+# Configurar un Broker Mosquitto local con autenticación
+
+	1.Instala Mosquitto y Mosquitto-clients (si no están instalados):
+
+		$ sudo apt-get install mosquitto mosquitto-clients
+
+	2.Habilita la autenticación en el archivo de configuración de Mosquitto.
+
+		$ sudo nano /etc/mosquitto/mosquitto.conf
+
+		Añade lo siguiente al archivo:
+
+		$ allow_anonymous false
+		$ password_file /etc/mosquitto/passwd
+
+	3.Crea usuarios y configura sus contraseñas:
+
+		$ sudo mosquitto_passwd -c /etc/mosquitto/passwd Iker
+		$ sudo mosquitto_passwd /etc/mosquitto/passwd Mikel
+
+        4.Reinicia el servicio Mosquitto:
+
+		 $ sudo systemctl restart mosquitto
+
+
+# Configurar permisos para el topic "examen"
+
+	1. Crea el archivo de configuración de ACL (Access Control List):
+
+		$ sudo nano /etc/mosquitto/acls
+		Añade lo siguiente al archivo:
+
+		user Ther
+		topic read examen
+
+		user Mikel
+		topic readwrite examen
+
+
+	2.En el archivo mosquitto.conf, asegúrate de que se utilicen las ACLs. Añade la siguiente línea:
+
+
+		$ acl_file /etc/mosquitto/acls
+
+
+	3.Reinicia el servicio Mosquitto:
+
+		 $ sudo systemctl restart mosquitto
+
+
+# Programar el envío automático de un mensaje MQTT cada 1 minuto
+
+	1.Crea un script llamado send_random.sh que envíe un número aleatorio al topic "examen":
+
+		$ sudo nano /usr/local/bin/send_random.sh
+		Contenido del archivo:
+
+		#!/bin/bash
+		RANDOM_NUMBER=$(shuf -i 1-100 -n 1)
+		mosquitto_pub -h localhost -t examen -u Mikel -P 'Mikel' -m "$RANDOM_NUMBER"
+
+	2. Haz que el script sea ejecutable:
+
+		$ sudo chmod +x /usr/local/bin/send_random.sh
+
+	3. Programa la tarea en cron para ejecutarse cada minuto:
+
+		$ sudo crontab -e
+
+	4.Añade la siguiente línea para ejecutar el script cada minuto:
+
+		$ * * * * * /usr/local/bin/send_random.sh
+
+
+# Usar un suscriptor Mosquitto para enviar mensajes recibidos al log del sistema
+
+
+	1.Crea un script que suscriba al usuario Ther y envíe mensajes al log del sistema:
+
+		$ sudo nano /usr/local/bin/subscribe_log.sh
+
+		Contenido del archivo:
+
+		#!/bin/bash
+		mosquitto_sub -h localhost -t examen -u Iker -P 'Iker' | while read -r message
+		do
+ 			logger -p user.warning "Mensaje recibido: $message"
+		done
+
+	2.Haz que el script sea ejecutable:
+
+		$ sudo chmod +x /usr/local/bin/subscribe_log.sh
+
+	3.Ejecuta el script para suscribirte al topic y enviar los mensajes al log con nivel warning:
+
+		$ /usr/local/bin/subscribe_log.sh &
+
+
+# Parar el envío automático de mensajes al topic
+
+		$ sudo crontab -e
+
+
+
+
+
+
+
+
+
+
+
