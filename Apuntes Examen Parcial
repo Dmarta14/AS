@@ -5,7 +5,7 @@ vim .bashrc
 
 source .bashrc
 .bash_history > historia.txt
-sudo cp -r /home/dmarta14/.bash_history /home/dmarta14/dmarta14_history
+sudo cp -r /home/dmarta14/.bash_history /home/dmarta14/79045493_Diego_Marta/diego_marta_history
 
 ---COPIAR DE GOOGLE CLOUD A MI PC---
 scp dmarta14@IP:/home/dmarta14/carpeta.tar.gz /home/dmarta14/Escritorio
